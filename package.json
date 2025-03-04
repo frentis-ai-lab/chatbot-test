@@ -1,15 +1,31 @@
 {
   "name": "openai-chatbot",
   "version": "1.0.0",
-  "description": "간단한 OpenAI API 챗봇",
-  "main": "index.js",
+  "description": "OpenAI API를 사용한 챗봇",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon --ignore data/ src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "openai",
+    "chatbot",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "openai": "^4.20.0"
+    "express-async-handler": "^1.2.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "openai": "^4.0.0",
+    "uuid": "^9.0.1"
   },
-  "type": "module"
-} 
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

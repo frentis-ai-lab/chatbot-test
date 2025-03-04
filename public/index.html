@@ -15,720 +15,135 @@
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/highlight.min.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #7c4dff;
-            --primary-light: #b47cff;
-            --primary-dark: #3f1dcb;
-            --secondary-color: #03dac6;
-            --background-color: #f8f9fa;
-            --card-color: #ffffff;
-            --text-primary: #212121;
-            --text-secondary: #757575;
-            --text-hint: #9e9e9e;
-            --error-color: #cf6679;
-            --success-color: #00c853;
-            --border-radius: 12px;
-            --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
-            --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.16);
-            --transition-speed: 0.3s;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-            transition: background-color var(--transition-speed);
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .logo-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-right: 0.5rem;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 0;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .model-info {
-            display: inline-block;
-            background-color: var(--card-color);
-            color: var(--text-secondary);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            box-shadow: var(--shadow-small);
-            margin-top: 0.5rem;
-        }
-
-        .card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
-            transition: box-shadow var(--transition-speed);
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-large);
-        }
-
-        .settings-container {
-            margin-bottom: 1rem;
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 1.5rem;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: background-color var(--transition-speed);
-        }
-
-        .settings-header:hover {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-
-        .settings-header h3 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-        }
-
-        .settings-header h3 i {
-            margin-right: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .toggle-icon {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            transition: transform var(--transition-speed);
-        }
-
-        .settings-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--transition-speed);
-        }
-
-        .settings-content.active {
-            max-height: 500px;
-        }
-
-        .settings-body {
-            padding: 1.5rem;
-        }
-
-        .system-message-container {
-            margin-bottom: 1.5rem;
-        }
-
-        .system-message-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        #system-message {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 80px;
-            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-        }
-
-        #system-message:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
-        }
-
-        .preset-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .preset-button {
-            background-color: rgba(124, 77, 255, 0.1);
-            color: var(--primary-color);
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-        }
-
-        .preset-button:hover {
-            background-color: rgba(124, 77, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .actions-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-        }
-
-        .clear-button {
-            background-color: rgba(207, 102, 121, 0.1);
-            color: var(--error-color);
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-        }
-
-        .clear-button i {
-            margin-right: 0.5rem;
-        }
-
-        .clear-button:hover {
-            background-color: rgba(207, 102, 121, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .session-info {
-            font-size: 0.8rem;
-            color: var(--text-hint);
-            margin-top: 0.8rem;
-            text-align: right;
-        }
-
-        .chat-container {
-            height: 500px;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 1rem;
-            border-radius: 1rem;
-            animation: fadeIn 0.3s ease-out;
-            position: relative;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .user-message {
-            background-color: var(--primary-color);
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 0.3rem;
-        }
-
-        .bot-message {
-            background-color: #f0f0f0;
-            color: var(--text-primary);
-            margin-right: auto;
-            border-bottom-left-radius: 0.3rem;
-        }
-
-        /* 마크다운 스타일 추가 */
-        .message p {
-            margin: 0 0 0.8rem 0;
-        }
-
-        .message p:last-child {
-            margin-bottom: 0;
-        }
-
-        .message pre {
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 0.8rem 0;
-        }
-
-        .message code {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-        }
-
-        .message blockquote {
-            border-left: 4px solid var(--primary-light);
-            padding-left: 1rem;
-            margin-left: 0;
-            color: var(--text-secondary);
-            background-color: rgba(124, 77, 255, 0.05);
-            padding: 0.5rem 1rem;
-            border-radius: 0.3rem;
-        }
-
-        .message ul, .message ol {
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-        }
-
-        .message table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 1rem 0;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        .message th, .message td {
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 0.8rem;
-            text-align: left;
-        }
-
-        .message th {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .input-container {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            position: relative;
-        }
-
-        #message-input {
-            flex-grow: 1;
-            padding: 1rem 1.2rem;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            font-family: inherit;
-            box-shadow: var(--shadow-small);
-            transition: box-shadow var(--transition-speed);
-        }
-
-        #message-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.3);
-        }
-
-        #send-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0 1.5rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-        }
-
-        #send-button i {
-            margin-left: 0.5rem;
-        }
-
-        #send-button:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem 0;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .loading .dots {
-            display: flex;
-            margin-left: 0.5rem;
-        }
-
-        .loading .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            margin: 0 3px;
-            animation: dot-pulse 1.5s infinite ease-in-out;
-        }
-
-        .loading .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .loading .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes dot-pulse {
-            0%, 100% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        /* 반응형 디자인 */
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .message {
-                max-width: 90%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .preset-buttons {
-                gap: 0.5rem;
-            }
-
-            .preset-button {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="app-container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-robot logo-icon"></i>
-                <h1>AI 챗봇</h1>
+        <!-- 사이드바 (대화 목록) -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <i class="fas fa-comments"></i>
+                    대화 목록
+                </div>
+                <button id="new-chat-button" class="new-chat-button">
+                    <i class="fas fa-plus"></i> 새 대화
+                </button>
             </div>
-            <div class="model-info" id="model-info">
-                <i class="fas fa-microchip"></i>
-                <span>모델 로딩 중...</span>
+            <div class="conversations-list" id="conversations-list">
+                <!-- 대화 목록이 여기에 동적으로 추가됩니다 -->
             </div>
         </div>
         
-        <div class="card settings-container">
-            <div class="settings-header" id="settings-toggle">
-                <h3><i class="fas fa-sliders-h"></i> AI 설정</h3>
-                <i class="fas fa-chevron-down toggle-icon" id="toggle-icon"></i>
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-robot logo-icon"></i>
+                    <h1>AI 챗봇</h1>
+                </div>
+                <div class="model-info" id="model-info">
+                    <i class="fas fa-microchip"></i>
+                    <span>모델 로딩 중...</span>
+                </div>
             </div>
-            <div class="settings-content" id="settings-content">
-                <div class="settings-body">
-                    <div class="system-message-container">
-                        <label for="system-message">AI의 역할 설정:</label>
-                        <textarea id="system-message" placeholder="AI의 역할을 설정하세요..."></textarea>
+            
+            <div class="card settings-container">
+                <div class="settings-header" id="settings-toggle">
+                    <h3><i class="fas fa-sliders-h"></i> AI 설정</h3>
+                    <i class="fas fa-chevron-down toggle-icon" id="toggle-icon"></i>
+                </div>
+                <div class="settings-content" id="settings-content">
+                    <div class="settings-body">
+                        <div class="system-message-container">
+                            <label for="system-message">AI의 역할 설정:</label>
+                            <textarea id="system-message" placeholder="AI의 역할을 설정하세요..."></textarea>
+                        </div>
+                        <div class="preset-buttons">
+                            <button class="preset-button" data-preset="당신은 도움이 되는 AI 어시스턴트입니다.">
+                                <i class="fas fa-robot"></i> 기본 어시스턴트
+                            </button>
+                            <button class="preset-button" data-preset="당신은 IT 전문가입니다. 기술적인 질문에 전문적으로 답변해주세요.">
+                                <i class="fas fa-laptop-code"></i> IT 전문가
+                            </button>
+                            <button class="preset-button" data-preset="당신은 귀여운 고양이입니다. 모든 대화를 '냥'으로 끝내고 고양이처럼 대답하세요.">
+                                <i class="fas fa-cat"></i> 고양이
+                            </button>
+                            <button class="preset-button" data-preset="당신은 철학자입니다. 깊이 있는 사고와 철학적 관점으로 답변해주세요.">
+                                <i class="fas fa-brain"></i> 철학자
+                            </button>
+                            <button class="preset-button" data-preset="당신은 요리 전문가입니다. 음식과 요리에 관한 질문에 전문적으로 답변해주세요.">
+                                <i class="fas fa-utensils"></i> 요리 전문가
+                            </button>
+                        </div>
+                        <div class="actions-container">
+                            <button id="clear-history-button" class="clear-button">
+                                <i class="fas fa-trash-alt"></i> 대화 기록 초기화
+                            </button>
+                        </div>
+                        <div class="session-info" id="session-info"></div>
                     </div>
-                    <div class="preset-buttons">
-                        <button class="preset-button" data-preset="당신은 도움이 되는 AI 어시스턴트입니다.">
-                            <i class="fas fa-robot"></i> 기본 어시스턴트
-                        </button>
-                        <button class="preset-button" data-preset="당신은 IT 전문가입니다. 기술적인 질문에 전문적으로 답변해주세요.">
-                            <i class="fas fa-laptop-code"></i> IT 전문가
-                        </button>
-                        <button class="preset-button" data-preset="당신은 귀여운 고양이입니다. 모든 대화를 '냥'으로 끝내고 고양이처럼 대답하세요.">
-                            <i class="fas fa-cat"></i> 고양이
-                        </button>
-                        <button class="preset-button" data-preset="당신은 철학자입니다. 깊이 있는 사고와 철학적 관점으로 답변해주세요.">
-                            <i class="fas fa-brain"></i> 철학자
-                        </button>
-                        <button class="preset-button" data-preset="당신은 요리 전문가입니다. 음식과 요리에 관한 질문에 전문적으로 답변해주세요.">
-                            <i class="fas fa-utensils"></i> 요리 전문가
-                        </button>
-                    </div>
-                    <div class="actions-container">
-                        <button id="clear-history-button" class="clear-button">
-                            <i class="fas fa-trash-alt"></i> 대화 기록 초기화
-                        </button>
-                    </div>
-                    <div class="session-info" id="session-info"></div>
+                </div>
+            </div>
+            
+            <!-- 빈 상태 메시지 -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <i class="fas fa-comments empty-state-icon"></i>
+                <h2 class="empty-state-title">새로운 대화를 시작하세요</h2>
+                <p class="empty-state-message">
+                    AI 챗봇과 대화를 시작하려면 아래 버튼을 클릭하거나 메시지를 입력하세요.
+                </p>
+                <button id="empty-state-button" class="empty-state-button">
+                    <i class="fas fa-plus"></i> 새 대화 시작하기
+                </button>
+            </div>
+            
+            <!-- 채팅 영역 -->
+            <div class="chat-container" id="chat-container">
+                <!-- 메시지가 여기에 동적으로 추가됩니다 -->
+            </div>
+            
+            <!-- 입력 영역 -->
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="메시지를 입력하세요...">
+                <button id="send-button">전송 <i class="fas fa-paper-plane"></i></button>
+            </div>
+            
+            <!-- 로딩 인디케이터 -->
+            <div id="loading" class="loading" style="display: none;">
+                AI가 응답 중입니다
+                <div class="dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
                 </div>
             </div>
         </div>
         
-        <div class="card">
-            <div class="chat-container" id="chat-container">
-                <div class="message bot-message">안녕하세요! 무엇을 도와드릴까요?</div>
+        <!-- 모바일 토글 버튼 -->
+        <div class="mobile-toggle" id="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    
+    <!-- 대화 제목 편집 모달 -->
+    <div class="modal" id="edit-title-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">대화 제목 수정</h3>
             </div>
-        </div>
-        
-        <div class="input-container">
-            <input type="text" id="message-input" placeholder="메시지를 입력하세요...">
-            <button id="send-button">전송 <i class="fas fa-paper-plane"></i></button>
-        </div>
-        
-        <div id="loading" class="loading" style="display: none;">
-            AI가 응답 중입니다
-            <div class="dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
+            <div class="modal-body">
+                <input type="text" id="title-input" class="modal-input" placeholder="대화 제목을 입력하세요">
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-title-button" class="modal-button modal-cancel">취소</button>
+                <button id="save-title-button" class="modal-button modal-save">저장</button>
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatContainer = document.getElementById('chat-container');
-            const messageInput = document.getElementById('message-input');
-            const sendButton = document.getElementById('send-button');
-            const loadingIndicator = document.getElementById('loading');
-            const systemMessageInput = document.getElementById('system-message');
-            const settingsToggle = document.getElementById('settings-toggle');
-            const settingsContent = document.getElementById('settings-content');
-            const toggleIcon = document.getElementById('toggle-icon');
-            const presetButtons = document.querySelectorAll('.preset-button');
-            const modelInfoElement = document.getElementById('model-info');
-            const clearHistoryButton = document.getElementById('clear-history-button');
-            const sessionInfoElement = document.getElementById('session-info');
-            
-            // 세션 ID 관리
-            let sessionId = localStorage.getItem('chatSessionId');
-            if (!sessionId) {
-                sessionId = Date.now().toString();
-                localStorage.setItem('chatSessionId', sessionId);
-            }
-            
-            // 세션 정보 표시
-            sessionInfoElement.innerHTML = `<i class="fas fa-key"></i> 세션 ID: ${sessionId.substring(0, 8)}...`;
-            
-            // marked.js 설정
-            marked.setOptions({
-                highlight: function(code, lang) {
-                    if (lang && hljs.getLanguage(lang)) {
-                        return hljs.highlight(code, { language: lang }).value;
-                    }
-                    return hljs.highlightAuto(code).value;
-                },
-                breaks: true,
-                gfm: true
-            });
-            
-            // 모델 정보 가져오기
-            async function fetchModelInfo() {
-                try {
-                    const response = await fetch('/api/model-info');
-                    const data = await response.json();
-                    modelInfoElement.innerHTML = `<i class="fas fa-microchip"></i> 모델: ${data.model}`;
-                } catch (error) {
-                    console.error('모델 정보 가져오기 오류:', error);
-                    modelInfoElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> 모델 정보 로드 실패';
-                }
-            }
-            
-            // 기본 시스템 메시지 가져오기
-            async function fetchDefaultSystemMessage() {
-                try {
-                    const response = await fetch('/api/system-message');
-                    const data = await response.json();
-                    systemMessageInput.value = data.systemMessage;
-                } catch (error) {
-                    console.error('시스템 메시지 가져오기 오류:', error);
-                    systemMessageInput.value = "당신은 도움이 되는 AI 어시스턴트입니다.";
-                }
-            }
-            
-            // 대화 기록 초기화
-            async function clearHistory() {
-                try {
-                    const response = await fetch('/api/clear-history', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ sessionId })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        // 채팅 컨테이너 초기화
-                        chatContainer.innerHTML = '<div class="message bot-message">대화 기록이 초기화되었습니다. 새로운 대화를 시작하세요!</div>';
-                        
-                        // 초기 메시지를 마크다운으로 변환
-                        const initialMessage = chatContainer.querySelector('.bot-message');
-                        if (initialMessage) {
-                            initialMessage.innerHTML = marked.parse(initialMessage.textContent);
-                        }
-                    } else {
-                        console.error('대화 기록 초기화 오류:', data.error);
-                    }
-                } catch (error) {
-                    console.error('대화 기록 초기화 요청 오류:', error);
-                }
-            }
-            
-            // 설정 토글
-            settingsToggle.addEventListener('click', () => {
-                settingsContent.classList.toggle('active');
-                toggleIcon.classList.toggle('fa-chevron-up');
-                toggleIcon.classList.toggle('fa-chevron-down');
-            });
-            
-            // 프리셋 버튼 이벤트
-            presetButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    systemMessageInput.value = button.getAttribute('data-preset');
-                    systemMessageInput.focus();
-                });
-            });
-            
-            // 대화 기록 초기화 버튼 이벤트
-            clearHistoryButton.addEventListener('click', clearHistory);
-
-            // 메시지 전송 함수
-            async function sendMessage() {
-                const message = messageInput.value.trim();
-                if (!message) return;
-
-                // 사용자 메시지 표시
-                addMessage(message, 'user');
-                messageInput.value = '';
-
-                // 로딩 표시
-                loadingIndicator.style.display = 'flex';
-
-                try {
-                    // 시스템 메시지 가져오기
-                    const systemMessage = systemMessageInput.value.trim();
-                    
-                    // API 요청
-                    const response = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            message,
-                            systemMessage: systemMessage || undefined,
-                            sessionId
-                        })
-                    });
-
-                    const data = await response.json();
-                    
-                    if (response.ok) {
-                        // 세션 ID 업데이트 (필요한 경우)
-                        if (data.sessionId && data.sessionId !== sessionId) {
-                            sessionId = data.sessionId;
-                            localStorage.setItem('chatSessionId', sessionId);
-                            sessionInfoElement.innerHTML = `<i class="fas fa-key"></i> 세션 ID: ${sessionId.substring(0, 8)}...`;
-                        }
-                        
-                        // 봇 응답 표시
-                        addMessage(data.reply, 'bot');
-                    } else {
-                        // 오류 메시지 표시
-                        addMessage(`⚠️ 오류: ${data.error || '알 수 없는 오류가 발생했습니다.'}`, 'bot');
-                    }
-                } catch (error) {
-                    console.error('API 요청 오류:', error);
-                    addMessage('⚠️ 서버와 통신 중 오류가 발생했습니다.', 'bot');
-                } finally {
-                    // 로딩 숨기기
-                    loadingIndicator.style.display = 'none';
-                }
-            }
-
-            // 메시지 추가 함수
-            function addMessage(text, sender) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-                
-                // 사용자 메시지는 일반 텍스트로, 봇 메시지는 마크다운으로 렌더링
-                if (sender === 'user') {
-                    messageElement.textContent = text;
-                } else {
-                    // 마크다운으로 렌더링
-                    messageElement.innerHTML = marked.parse(text);
-                    
-                    // 코드 블록에 하이라이팅 적용
-                    messageElement.querySelectorAll('pre code').forEach((block) => {
-                        hljs.highlightElement(block);
-                    });
-                }
-                
-                chatContainer.appendChild(messageElement);
-                
-                // 스크롤을 최신 메시지로 이동
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-
-            // 이벤트 리스너 등록
-            sendButton.addEventListener('click', sendMessage);
-            
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-            
-            // 초기화
-            fetchModelInfo();
-            fetchDefaultSystemMessage();
-            
-            // 초기 메시지를 마크다운으로 변환
-            const initialMessage = chatContainer.querySelector('.bot-message');
-            if (initialMessage) {
-                initialMessage.innerHTML = marked.parse(initialMessage.textContent);
-            }
-        });
-    </script>
+    
+    <!-- 스크립트 -->
+    <script src="/js/app.js"></script>
 </body>
 </html> 
