@@ -12,6 +12,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+// 기본 시스템 메시지 설정
+const DEFAULT_SYSTEM_MESSAGE = process.env.DEFAULT_SYSTEM_MESSAGE || "당신은 도움이 되는 AI 어시스턴트입니다.";
+
 // JSON 파싱 미들웨어
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,16 +39,19 @@ app.get('/', (req, res) => {
 // 챗봇 API 엔드포인트
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, systemMessage } = req.body;
     
     if (!message) {
       return res.status(400).json({ error: '메시지가 필요합니다.' });
     }
 
+    // 시스템 메시지 설정 (요청에서 제공되지 않으면 기본값 사용)
+    const finalSystemMessage = systemMessage || DEFAULT_SYSTEM_MESSAGE;
+
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "당신은 도움이 되는 AI 어시스턴트입니다." },
+        { role: "system", content: finalSystemMessage },
         { role: "user", content: message }
       ],
       max_tokens: 500
@@ -57,6 +63,11 @@ app.post('/api/chat', async (req, res) => {
     console.error('OpenAI API 오류:', error);
     res.status(500).json({ error: '서버 오류가 발생했습니다.' });
   }
+});
+
+// 시스템 메시지 설정 API 엔드포인트
+app.get('/api/system-message', (req, res) => {
+  res.json({ systemMessage: DEFAULT_SYSTEM_MESSAGE });
 });
 
 // 서버 시작

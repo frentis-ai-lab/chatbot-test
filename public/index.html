@@ -44,6 +44,7 @@
         .input-container {
             display: flex;
             gap: 10px;
+            margin-bottom: 15px;
         }
         #message-input {
             flex-grow: 1;
@@ -69,10 +70,81 @@
             margin: 10px 0;
             color: #666;
         }
+        .settings-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .settings-content {
+            display: none;
+        }
+        .settings-content.active {
+            display: block;
+        }
+        .system-message-container {
+            margin-bottom: 15px;
+        }
+        #system-message {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 60px;
+        }
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .preset-button {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .preset-button:hover {
+            background-color: #d0d0d0;
+        }
     </style>
 </head>
 <body>
     <h1>OpenAI 챗봇</h1>
+    
+    <div class="settings-container">
+        <div class="settings-header" id="settings-toggle">
+            <h3>시스템 메시지 설정</h3>
+            <span id="toggle-icon">▼</span>
+        </div>
+        <div class="settings-content" id="settings-content">
+            <div class="system-message-container">
+                <label for="system-message">AI의 역할 설정:</label>
+                <textarea id="system-message" placeholder="AI의 역할을 설정하세요..."></textarea>
+            </div>
+            <div class="preset-buttons">
+                <button class="preset-button" data-preset="당신은 도움이 되는 AI 어시스턴트입니다.">기본 어시스턴트</button>
+                <button class="preset-button" data-preset="당신은 IT 전문가입니다. 기술적인 질문에 전문적으로 답변해주세요.">IT 전문가</button>
+                <button class="preset-button" data-preset="당신은 귀여운 고양이입니다. 모든 대화를 '냥'으로 끝내고 고양이처럼 대답하세요.">고양이</button>
+                <button class="preset-button" data-preset="당신은 철학자입니다. 깊이 있는 사고와 철학적 관점으로 답변해주세요.">철학자</button>
+                <button class="preset-button" data-preset="당신은 요리 전문가입니다. 음식과 요리에 관한 질문에 전문적으로 답변해주세요.">요리 전문가</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="chat-container" id="chat-container">
         <div class="message bot-message">안녕하세요! 무엇을 도와드릴까요?</div>
     </div>
@@ -88,6 +160,36 @@
             const messageInput = document.getElementById('message-input');
             const sendButton = document.getElementById('send-button');
             const loadingIndicator = document.getElementById('loading');
+            const systemMessageInput = document.getElementById('system-message');
+            const settingsToggle = document.getElementById('settings-toggle');
+            const settingsContent = document.getElementById('settings-content');
+            const toggleIcon = document.getElementById('toggle-icon');
+            const presetButtons = document.querySelectorAll('.preset-button');
+            
+            // 기본 시스템 메시지 가져오기
+            async function fetchDefaultSystemMessage() {
+                try {
+                    const response = await fetch('/api/system-message');
+                    const data = await response.json();
+                    systemMessageInput.value = data.systemMessage;
+                } catch (error) {
+                    console.error('시스템 메시지 가져오기 오류:', error);
+                    systemMessageInput.value = "당신은 도움이 되는 AI 어시스턴트입니다.";
+                }
+            }
+            
+            // 설정 토글
+            settingsToggle.addEventListener('click', () => {
+                settingsContent.classList.toggle('active');
+                toggleIcon.textContent = settingsContent.classList.contains('active') ? '▲' : '▼';
+            });
+            
+            // 프리셋 버튼 이벤트
+            presetButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    systemMessageInput.value = button.getAttribute('data-preset');
+                });
+            });
 
             // 메시지 전송 함수
             async function sendMessage() {
@@ -102,13 +204,19 @@
                 loadingIndicator.style.display = 'block';
 
                 try {
+                    // 시스템 메시지 가져오기
+                    const systemMessage = systemMessageInput.value.trim();
+                    
                     // API 요청
                     const response = await fetch('/api/chat', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ message })
+                        body: JSON.stringify({ 
+                            message,
+                            systemMessage: systemMessage || undefined
+                        })
                     });
 
                     const data = await response.json();
@@ -150,6 +258,9 @@
                     sendMessage();
                 }
             });
+            
+            // 초기화
+            fetchDefaultSystemMessage();
         });
     </script>
 </body>
