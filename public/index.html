@@ -16,6 +16,12 @@
             color: #333;
             text-align: center;
         }
+        .model-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
         .chat-container {
             background-color: white;
             border-radius: 10px;
@@ -124,6 +130,7 @@
 </head>
 <body>
     <h1>OpenAI 챗봇</h1>
+    <div class="model-info" id="model-info">사용 중인 모델: 로딩 중...</div>
     
     <div class="settings-container">
         <div class="settings-header" id="settings-toggle">
@@ -165,6 +172,19 @@
             const settingsContent = document.getElementById('settings-content');
             const toggleIcon = document.getElementById('toggle-icon');
             const presetButtons = document.querySelectorAll('.preset-button');
+            const modelInfoElement = document.getElementById('model-info');
+            
+            // 모델 정보 가져오기
+            async function fetchModelInfo() {
+                try {
+                    const response = await fetch('/api/model-info');
+                    const data = await response.json();
+                    modelInfoElement.textContent = `사용 중인 모델: ${data.model}`;
+                } catch (error) {
+                    console.error('모델 정보 가져오기 오류:', error);
+                    modelInfoElement.textContent = '사용 중인 모델: 정보를 가져올 수 없습니다.';
+                }
+            }
             
             // 기본 시스템 메시지 가져오기
             async function fetchDefaultSystemMessage() {
@@ -260,6 +280,7 @@
             });
             
             // 초기화
+            fetchModelInfo();
             fetchDefaultSystemMessage();
         });
     </script>

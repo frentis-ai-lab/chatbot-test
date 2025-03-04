@@ -15,6 +15,9 @@ const port = process.env.PORT || 3001;
 // 기본 시스템 메시지 설정
 const DEFAULT_SYSTEM_MESSAGE = process.env.DEFAULT_SYSTEM_MESSAGE || "당신은 도움이 되는 AI 어시스턴트입니다.";
 
+// 사용할 OpenAI 모델 설정
+const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+
 // JSON 파싱 미들웨어
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,7 +52,7 @@ app.post('/api/chat', async (req, res) => {
     const finalSystemMessage = systemMessage || DEFAULT_SYSTEM_MESSAGE;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: OPENAI_MODEL,
       messages: [
         { role: "system", content: finalSystemMessage },
         { role: "user", content: message }
@@ -70,7 +73,13 @@ app.get('/api/system-message', (req, res) => {
   res.json({ systemMessage: DEFAULT_SYSTEM_MESSAGE });
 });
 
+// 모델 정보 API 엔드포인트
+app.get('/api/model-info', (req, res) => {
+  res.json({ model: OPENAI_MODEL });
+});
+
 // 서버 시작
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
+  console.log(`사용 중인 OpenAI 모델: ${OPENAI_MODEL}`);
 }); 
